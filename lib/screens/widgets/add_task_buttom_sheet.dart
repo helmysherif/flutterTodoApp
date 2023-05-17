@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/styles/app_colors.dart';
-
 class AddTaskBottomSheet extends StatefulWidget {
-  AddTaskBottomSheet({Key? key}) : super(key: key);
+  const AddTaskBottomSheet({Key? key}) : super(key: key);
 
   @override
   State<AddTaskBottomSheet> createState() => _AddTaskBottomSheetState();
 }
-
 class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   var formKey = GlobalKey<FormState>();
   String selected = DateTime.now().toString().substring(0, 10);
-
   @override
   Widget build(BuildContext context) {
     return Padding(
