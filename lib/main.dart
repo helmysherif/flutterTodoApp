@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       initialRoute: SplashScreen.routeName,
       routes: {
         SplashScreen.routeName: (_) => const SplashScreen(),
-        HomeLayout.routeName: (_) => const HomeLayout()
+        HomeLayout.routeName: (_) => HomeLayout()
       },
       theme: MyThemeData.lightTheme,
       darkTheme: MyThemeData.darkTheme,
