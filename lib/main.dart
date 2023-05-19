@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:todo_app/screens/login_screen.dart';
+import 'package:todo_app/screens/register_screen.dart';
 import 'package:todo_app/styles/my_themes.dart';
 import 'package:todo_app/home_layout/home_screen.dart';
 import 'package:todo_app/splash_layout/splash_screen.dart';
@@ -24,7 +26,9 @@ class MyApp extends StatelessWidget {
       initialRoute: SplashScreen.routeName,
       routes: {
         SplashScreen.routeName: (_) => const SplashScreen(),
-        HomeLayout.routeName: (_) => HomeLayout()
+        HomeLayout.routeName: (_) => HomeLayout(),
+        RegisterScreen.routeName: (_) => const RegisterScreen(),
+        LoginScreen.routeName: (_) => const LoginScreen()
       },
       theme: MyThemeData.lightTheme,
       darkTheme: MyThemeData.darkTheme,
