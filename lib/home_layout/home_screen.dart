@@ -14,7 +14,7 @@ class HomeLayout extends StatefulWidget {
 
 class _HomeLayoutState extends State<HomeLayout> {
   int index = 0;
-  List<Widget> tabs = [TasksTab(), SettingsTab()];
+  List<Widget> tabs = [const TasksTab(), const SettingsTab()];
 
   @override
   Widget build(BuildContext context) {

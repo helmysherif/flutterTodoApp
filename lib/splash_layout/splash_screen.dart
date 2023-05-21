@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/home_layout/home_screen.dart';
+import 'package:todo_app/screens/register_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String routeName = "splash";
@@ -15,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 4), () {
-      Navigator.pushReplacementNamed(context, HomeLayout.routeName);
+      Navigator.pushReplacementNamed(context, RegisterScreen.routeName);
     });
   }
 

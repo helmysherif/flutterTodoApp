@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       routes: {
         SplashScreen.routeName: (_) => const SplashScreen(),
         HomeLayout.routeName: (_) => HomeLayout(),
-        RegisterScreen.routeName: (_) => const RegisterScreen(),
+        RegisterScreen.routeName: (_) => RegisterScreen(),
         LoginScreen.routeName: (_) => const LoginScreen()
       },
       theme: MyThemeData.lightTheme,

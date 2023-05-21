@@ -14,7 +14,7 @@ class MyThemeData {
       ),
       appBarTheme: const AppBarTheme(
           backgroundColor: lightColor,
-          centerTitle: false,
+          centerTitle: true,
           iconTheme: IconThemeData(color: Colors.white, size: 30)),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Colors.white,
