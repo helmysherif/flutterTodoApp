@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app/shared/components/custom_form_field.dart';
 import 'package:todo_app/shared/components/dialog_utils.dart';
+import 'package:todo_app/shared/network/firebase/firebase_functions.dart';
 import 'package:todo_app/shared/validation_utils.dart';
 import 'package:todo_app/styles/app_colors.dart';
 
@@ -27,7 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-          color: lightGreenColor,
+          color: Colors.white,
           image: DecorationImage(
               image: AssetImage("assets/images/SIGN IN – 1.png"),
               fit: BoxFit.fill)),
@@ -141,31 +142,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
     // register logic
-    DialogUtils.showLoadingDialog(context, "loading...");
-    try {
-      var res = await authServices.createUserWithEmailAndPassword(
-          email: emailController.text, password: passwordController.text);
-      DialogUtils.hideDialog(context);
-      DialogUtils.showMessage(context, "successful registeration");
-      Navigator.pushReplacementNamed(context, LoginScreen.routeName);
-    } on FirebaseAuthException catch (e) {
-      DialogUtils.hideDialog(context);
-      String errorMessage = "Something went wrong!";
-      if (e.code == 'weak-password') {
-        errorMessage = 'The password provided is too weak.';
-      } else if (e.code == 'email-already-in-use') {
-        errorMessage = 'The account already exists for that email.';
-      }
-      DialogUtils.showMessage(context, errorMessage,
-          postActionName: "Ok", negativeActionName: "Cancel");
-    } catch (e) {
-      DialogUtils.hideDialog(context);
-      String errorMessage = "Something went wrong!";
-      DialogUtils.showMessage(context, errorMessage,
-          postActionName: "Cancel",
-          negativeActionName: "Try Again", negativeCallback: () {
-        register();
-      });
-    }
+    FireBaseFunctions.createAccount(
+        name: nameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+        onLoad: () {
+          DialogUtils.showLoadingDialog(context, "loading...");
+        },
+        onHide: () {
+          DialogUtils.hideDialog(context);
+        },
+        logged: () {
+          Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+        },
+        onError: (errMsg) {
+          DialogUtils.showMessage(context, errMsg,
+              postActionName: "Cancel",
+              negativeActionName: "Try Again", negativeCallback: () {
+            register();
+          });
+        });
   }
 }

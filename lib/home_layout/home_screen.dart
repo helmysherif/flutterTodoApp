@@ -1,4 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/providers/my_provider.dart';
+import 'package:todo_app/screens/login_screen.dart';
 import 'package:todo_app/screens/tasks.dart';
 import '../screens/settings.dart';
 import '../screens/widgets/add_task_buttom_sheet.dart';
@@ -6,7 +10,7 @@ import '../screens/widgets/add_task_buttom_sheet.dart';
 class HomeLayout extends StatefulWidget {
   static const String routeName = "home";
 
-  HomeLayout({Key? key}) : super(key: key);
+  const HomeLayout({Key? key}) : super(key: key);
 
   @override
   State<HomeLayout> createState() => _HomeLayoutState();
@@ -18,10 +22,20 @@ class _HomeLayoutState extends State<HomeLayout> {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<MyProvider>(context);
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
-        title: const Text("Todo App"),
+        title: Text("Todo App ${provider.myUser?.name ?? ''}"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              provider.logout();
+              Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+            },
+            icon: const Icon(Icons.logout),
+          )
+        ],
         // toolbarHeight: 100,
       ),
       body: tabs[index],
@@ -57,7 +71,7 @@ class _HomeLayoutState extends State<HomeLayout> {
                   label: ""),
               BottomNavigationBarItem(
                 icon:
-                    SizedBox(height: 15, child: Icon(Icons.settings_outlined)),
+                SizedBox(height: 15, child: Icon(Icons.settings_outlined)),
                 label: "",
               ),
             ],
@@ -71,10 +85,10 @@ class _HomeLayoutState extends State<HomeLayout> {
     showModalBottomSheet(
         context: context,
         builder: (context) => Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: const AddTaskBottomSheet(),
-            ),
+          padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: const AddTaskBottomSheet(),
+        ),
         isScrollControlled: true);
   }
 }

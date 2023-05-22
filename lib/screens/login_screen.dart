@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todo_app/home_layout/home_screen.dart';
 import 'package:todo_app/screens/register_screen.dart';
+import 'package:todo_app/shared/network/firebase/firebase_functions.dart';
+import '../providers/my_provider.dart';
 import '../shared/components/custom_form_field.dart';
 import '../shared/components/dialog_utils.dart';
 import '../shared/validation_utils.dart';
@@ -23,9 +26,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<MyProvider>(context);
     return Container(
       decoration: const BoxDecoration(
-          color: lightGreenColor,
+          color: Colors.white,
           image: DecorationImage(
               image: AssetImage("assets/images/SIGN IN – 1.png"),
               fit: BoxFit.fill)),
@@ -77,7 +81,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                   ElevatedButton(
-                    onPressed: login,
+                    onPressed: () {
+                      login(provider);
+                    },
                     style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         elevation: 0),
@@ -108,31 +114,30 @@ class _LoginScreenState extends State<LoginScreen> {
 
   FirebaseAuth authServices = FirebaseAuth.instance;
 
-  void login() async {
+  void login(provider) async {
     if (formKey.currentState?.validate() == false) {
       return;
     }
-    // register logic
-    DialogUtils.showLoadingDialog(context, "loading...");
-    try {
-      var res = await authServices.signInWithEmailAndPassword(
-          email: emailController.text, password: passwordController.text);
-      DialogUtils.hideDialog(context);
-      DialogUtils.showMessage(context, "successful login");
-      Navigator.pushReplacementNamed(context, HomeLayout.routeName);
-    } on FirebaseAuthException catch (e) {
-      DialogUtils.hideDialog(context);
-      String errorMessage = "Wrong email or password!";
-      DialogUtils.showMessage(context, errorMessage,
-          postActionName: "Ok", negativeActionName: "Cancel");
-    } catch (e) {
-      DialogUtils.hideDialog(context);
-      String errorMessage = "Something went wrong!";
-      DialogUtils.showMessage(context, errorMessage,
-          postActionName: "Cancel",
-          negativeActionName: "Try Again", negativeCallback: () {
-        login();
-      });
-    }
+    // login logic
+    FireBaseFunctions.login(
+        email: emailController.text,
+        password: passwordController.text,
+        onError: (errMsg) {
+          DialogUtils.showMessage(context, errMsg,
+              postActionName: "Cancel",
+              negativeActionName: "Try Again", negativeCallback: () {
+            login(provider);
+          });
+        },
+        onLoad: () {
+          DialogUtils.showLoadingDialog(context, "loading...");
+        },
+        onHide: () {
+          DialogUtils.hideDialog(context);
+        },
+        logged: () {
+          provider.initUser();
+          Navigator.pushReplacementNamed(context, HomeLayout.routeName);
+        });
   }
 }

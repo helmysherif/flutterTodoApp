@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/providers/my_provider.dart';
 import 'package:todo_app/screens/login_screen.dart';
 import 'package:todo_app/screens/register_screen.dart';
 import 'package:todo_app/styles/my_themes.dart';
@@ -12,7 +14,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+      create: (context) => MyProvider(), child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

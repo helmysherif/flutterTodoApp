@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app/models/task_model.dart';
 import 'package:todo_app/shared/network/firebase/firebase_functions.dart';
@@ -105,6 +106,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
                     TaskModel task = TaskModel(
+                        userId: FirebaseAuth.instance.currentUser!.uid,
+                        dateOfTime: DateTime.now().microsecondsSinceEpoch,
                         title: titleController.text,
                         description: descController.text,
                         date: selected.microsecondsSinceEpoch,
@@ -126,13 +129,13 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   void chooseDate() async {
     DateTime? selectedDate = await showDatePicker(
         builder: (context, child) => Theme(
-              data: Theme.of(context).copyWith(
-                  colorScheme: Theme.of(context).colorScheme!.copyWith(
-                      primary: Colors.red,
-                      onSecondary: Colors.green,
-                      onSurface: Colors.black)),
-              child: child!,
-            ),
+          data: Theme.of(context).copyWith(
+              colorScheme: Theme.of(context).colorScheme!.copyWith(
+                  primary: Colors.red,
+                  onSecondary: Colors.green,
+                  onSurface: Colors.black)),
+          child: child!,
+        ),
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime.now(),

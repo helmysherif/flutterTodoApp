@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todo_app/home_layout/home_screen.dart';
 import 'package:todo_app/screens/register_screen.dart';
+
+import '../providers/my_provider.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String routeName = "splash";
@@ -15,13 +18,18 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 4), () {
-      Navigator.pushReplacementNamed(context, RegisterScreen.routeName);
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<MyProvider>(context);
+    Future.delayed(const Duration(seconds: 4), () {
+      Navigator.pushReplacementNamed(
+          context,
+          provider.firebaseUser != null
+              ? HomeLayout.routeName
+              : RegisterScreen.routeName);
+    });
     return Scaffold(
       backgroundColor: const Color(0xffDFECDB),
       body: Column(
